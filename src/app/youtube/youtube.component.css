@@ -1,0 +1,16 @@
+.table-body{
+  max-height: 360px;
+  overflow-y: scroll;
+  display: block;
+}
+
+
+.add-video-button:hover {
+  color: green;
+  cursor: pointer;
+}
+
+.play-video-button:hover {
+  color: green;
+  cursor: pointer;
+}

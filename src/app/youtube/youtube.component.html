@@ -1,28 +1,75 @@
-<div class="col-lg-12">
-  <form (submit)="getPlaylists()">
-    <input type="text" [(ngModel)] = "channelId" class="form-control" placeholder="YouTube Channel ID"/>
-  </form>
+<div id="video-container" class="col-lg-12">
+  <h2>Current YouTube Video</h2>
+  <hr>
+  <div align="center" class="embed-responsive embed-responsive-16by9">
+    <iframe width="100%" height="345" [src]="playingVideo"></iframe>
+  </div>
+</div>
+<div class="col-lg-12" id="settings-container">
+  <h2>General Music Settings</h2>
+  <hr>
 </div>
 <div class="col-lg-12">
   <div class="row">
-    <div *ngIf="playlists != null" class="col-lg-6">
+    <div class="col-lg-6">
+      <h3>Connect YouTube Channel</h3>
+      <hr>
+      <form (submit)="getPlaylists()">
+        <input type="text" [(ngModel)]="channelId" class="form-control" placeholder="YouTube Channel ID"/>
+      </form>
+    </div>
+    <div class="col-lg-6">
+      <h3>YouTube Channel Playlists</h3>
+      <hr>
       <select (change)="getPlaylistVideos($event.target.value)" class="form-control">
         <option *ngFor="let playlist of playlists" value={{playlist.id}}>{{ playlist.snippet.title }}</option>
       </select>
-      <div id="playlist-videos" class="col-lg-12">
-        <div *ngFor="let video of playlistVideos" class="row playlist-video">
-          <img src="{{video.snippet.thumbnails.default.url}}" alt="Video Thumbnail" class="img-responsive img-thumbnail" />
-          <h4>{{video.snippet.title}}</h4>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-6">
-        <input type="text" class="form-control" (keyup)="searchVideos($event.target.value)" placeholder="Search YouTube"/>
-        <div *ngFor="let video of searchVideoResults" class="row search-result-video">
-          <img src="{{video.snippet.thumbnails.default.url}}" alt="Video Thumbnail" class="img-responsive img-thumbnail" />
-          <h4>{{video.snippet.title}}</h4>
-        </div>
     </div>
   </div>
-
+</div>
+<br>
+<div class="col-lg-12">
+  <br>
+  <div class="row">
+    <div class="col-lg-6">
+      <h3>Current Playlist</h3>
+      <hr>
+      <table id="playlist-table" class="table table-responsive">
+        <tbody class="table-body">
+        <tr *ngFor="let video of playlistVideos" class="row playlist-video">
+          <td class="actions">
+            <i (click)="playVideo(video)" class="fa fa-youtube-play fa-3x play-video-button" aria-hidden="true"></i>
+          </td>
+          <td class="video-title">
+            {{video.snippet.title}}
+          </td>
+          <td class="video-thumbnail">
+            <img src="{{video.snippet.thumbnails.default.url}}" alt="Video Thumbnail" class="img-responsive img-thumbnail"/>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-lg-6">
+      <h3>Search YouTube</h3>
+      <hr>
+      <input type="text" class="form-control" (keyup)="searchVideos($event.target.value)" placeholder="Search YouTube"/>
+      <br>
+      <table id="search-videos-table" class="table table-responsive">
+        <tbody class="table-body">
+        <tr *ngFor="let video of searchVideoResults" class="search-video">
+          <td class="video-add">
+            <i (click)="addVideoToPlaylist(video)" class="fa fa-plus-square-o fa-3x add-video-button"></i>
+          </td>
+          <td class="video-title">
+            {{video.snippet.title}}
+          </td>
+          <td class="video-thumbnail">
+            <img src="{{video.snippet.thumbnails.default.url}}" alt="Video Thumbnail" class="img-responsive img-thumbnail"/>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

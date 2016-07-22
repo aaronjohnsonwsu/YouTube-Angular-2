@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { YoutubeService } from '../youtube.service'
+import { SafeResourceUrl, DomSanitizationService } from '@angular/platform-browser';
 
 @Component({
   moduleId: module.id,
@@ -16,16 +17,17 @@ export class YoutubeComponent implements OnInit {
   playlists = [];
   playlistVideos;
   searchVideoResults;
+  playingVideo;
 
-  constructor(private _youtubeService: YoutubeService) {}
-
-  ngOnInit() {
-    this.getPlaylists(null);
+  constructor(private _youtubeService: YoutubeService, private sanitizer: DomSanitizationService) {
+    this.playingVideo = this.sanitizer.bypassSecurityTrustResourceUrl("https://www.youtube.com/embed/IdWZgTvf4t0");
   }
 
-  getPlaylists(channelId){
-    
-    this.channelId = channelId;
+  ngOnInit() {
+    this.getPlaylists();
+  }
+
+  getPlaylists(){
 
     this._youtubeService.getPlaylists(this.channelId)
       .subscribe(
@@ -36,8 +38,6 @@ export class YoutubeComponent implements OnInit {
   }
 
   getPlaylistVideos(playlistId){
-    console.log("Getting playlist videos");
-
     this.playlistId = playlistId;
 
     this._youtubeService.getPlaylistVideos(this.playlistId, "")
@@ -49,7 +49,6 @@ export class YoutubeComponent implements OnInit {
   }
 
   searchVideos(keyword){
-
      this._youtubeService.searchVideos(keyword)
       .subscribe(
         data => this.searchVideoResults = data.items,
@@ -57,6 +56,21 @@ export class YoutubeComponent implements OnInit {
         () => console.log(this.searchVideoResults)
       );
 
+  }
+
+  playVideo(video){
+    if(video.kind == "youtube#searchResult" ){
+      console.log(video.id.videoId);
+      this.playingVideo = this.sanitizer.bypassSecurityTrustResourceUrl("https://www.youtube.com/embed/" + video.id.videoId + "?autoplay=1");
+    }
+    else{
+      console.log(video.snippet.resourceId.videoId);
+      this.playingVideo = this.sanitizer.bypassSecurityTrustResourceUrl("https://www.youtube.com/embed/" + video.snippet.resourceId.videoId + "?autoplay=1");
+    }
+  }
+
+  addVideoToPlaylist(video){
+    this.playlistVideos.push(video);
   }
 
 }

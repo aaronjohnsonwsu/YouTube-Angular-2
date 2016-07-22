@@ -2,8 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>YoutubeAngular2</title>
-  <link rel="stylesheet" href="https://bootswatch.com/sandstone/bootstrap.min.css">
+  <title>Angular 2 - YouTube Example</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
   <base href="/">
 
   {{#unless environment.production}}
@@ -15,7 +16,7 @@
 <body>
   <app-root>Loading...</app-root>
 
-  
+
 
     {{#each scripts.polyfills}}
     <script src="{{.}}"></script>
@@ -26,7 +27,7 @@
       }).catch(console.error.bind(console));
     </script>
 
-  
+
 
 </body>
 </html>
